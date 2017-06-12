@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Page host iframe CPU hungry</title>
+  </head>
+  <body>
+    <div id="Counter"></div>
+    <script type="text/javascript">
+      var i = 0
+      function inc() {
+        window.Counter.innerHTML = ++i
+      }
+      setInterval(inc, 1000/3) // 3x per sec
+    </script>
+    <!-- <iframe src="http://localhost:8000/iframe1.html" /> -->
+    <iframe src="https://4e61364a.ngrok.io/iframe1.html" />
+  </body>
+</html>

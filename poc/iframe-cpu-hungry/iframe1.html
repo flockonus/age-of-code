@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>i'm iframe1</h1>
+    <p id="banner">my scripts block, they are the shit</p>
+    <script type="text/javascript">
+      setTimeout(function(){
+        var i = 1e6
+        var x = 1
+        while(i > 0) {
+          i -= 1
+          x = (x + Math.random()) % 10000
+          if (Math.random() > 0.99) console.log(new Date(), 'i:', i, x)
+        }
+        window.banner.innerHTML = 'DONE!'
+      }, 1000)
+    </script>
+  </body>
+</html>
