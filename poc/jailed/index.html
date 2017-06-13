@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Page host iframe CPU hungry</title>
+  </head>
+  <body>
+    <div id="Counter"></div>
+    <div id="WorkerLog"></div>
+    <script type="text/javascript">
+      var i = 0
+      function inc() {
+        window.Counter.innerHTML = ++i
+      }
+      setInterval(inc, 1000/3) // 3x per sec
+    </script>
+    <script src="./jailed-0.3.1/lib/jailed.js"></script>
+
+    <script type="text/javascript">
+    function setLog(str) {
+      WorkerLog.innerHTML = str;
+    }
+    var path = 'http://localhost:8000/poc/jailed/hungry.js';
+    // set of methods to be exported into the plugin
+    var api = {
+      log: setLog
+    }
+    var plugin = new jailed.Plugin(path, api);
+    </script>
+  </body>
+</html>
