@@ -1,0 +1,33 @@
+{
+  "name": "age-of-code",
+  "version": "1.0.0",
+  "description": "crazy codez",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flockonus/age-of-code.git"
+  },
+  "author": "flockonus",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/flockonus/age-of-code/issues"
+  },
+  "homepage": "https://github.com/flockonus/age-of-code#readme",
+  "dependencies": {
+    "phaser-ce": "2.8.0"
+  },
+  "standard": {
+    "globals": [
+      "Phaser"
+    ],
+    "env": [
+      "mocha"
+    ]
+  },
+  "devDependencies": {
+    "standard": "10.0.2"
+  }
+}
