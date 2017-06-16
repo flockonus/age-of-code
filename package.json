@@ -21,7 +21,9 @@
   },
   "standard": {
     "globals": [
-      "Phaser"
+      "Phaser",
+      "application",
+      "jailed"
     ],
     "env": [
       "mocha"

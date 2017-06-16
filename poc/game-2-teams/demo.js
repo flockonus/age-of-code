@@ -9,6 +9,47 @@ const C = {
   BULLET_SPEED: 150
 }
 
+var playersReady = {}
+
+function makePlayerInterface (playerName) {
+  playersReady[playerName] = false
+  return {
+    getPlayerName (cb) {
+      cb(null, playerName)
+    },
+    // interface for the player to pass messages to app
+    send (params, callback) {
+      console.log('player', playerName, params)
+      // TODO implement actual msg interface
+      callback(null, {})
+    },
+    log (...args) {
+      console.log('%c' + playerName + ' log:', 'color: blue;', ...args)
+    },
+    error (...args) {
+      console.warn('%c' + playerName + ' ERROR:', ...args)
+    },
+    ready () {
+      console.log(playerName, 'is ready!')
+      playersReady[playerName] = true
+      // TODO some signal about player being ready
+    }
+  }
+}
+
+// after the game is loaded, load workers and start listening to their whining
+function loadWorkers () {
+  var p1Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/goodPlayer.js', makePlayerInterface('p1'))
+
+  p1Interface.whenConnected(() => {
+    console.log('p1 script loaded succesfully')
+    var p2Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/badPlayer.js', makePlayerInterface('p2'))
+    p2Interface.whenConnected(() => {
+      console.log('p2 script loaded succesfully')
+    })
+  })
+}
+
 var game = new Phaser.Game(200, 400, Phaser.CANVAS, 'my-canvas', {preload: preload, create: create, update: update, render: render})
 
 function preload () {
@@ -73,6 +114,9 @@ function create () {
     ammo.body.allowRotation = false
     ammo.events.onOutOfBounds.add((b) => b.kill(), this)
   }
+
+  // lst but not least, connect player scripts
+  loadWorkers()
 }
 
 function handleAHitsB (projectileA, unitB) {
@@ -94,14 +138,9 @@ function update () {
   // } else if (cursors.right.isDown) {
   //   sprite.body.velocity.x = 300
   // }
-
-  // useful: sprite.rotation = game.physics.arcade.moveToPointer(sprite, 60, game.input.activePointer, 500);
-
-  // if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-  //   fireBullet()
-  // }
 }
 
+// simple demo function of a supposed warrior attacking - use via console
 function warriorAAttack (angleDegrees) {
   angleDegrees = angleDegrees || 0
   // TODO test cooldown if (game.time.now > bulletTime) {
