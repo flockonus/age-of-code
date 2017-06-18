@@ -31,4 +31,4 @@ function load () {
   methods.ready()
 }
 
-setTimeout(load, 10)
+setTimeout(load, 100)

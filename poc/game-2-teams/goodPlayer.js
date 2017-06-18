@@ -1,13 +1,18 @@
-var methods = application.remote
+var game = application.remote
 var name
-methods.getPlayerName((e, n) => {
+game.getPlayerName((e, n) => {
   name = n
 })
-console.log = methods.log
+console.log = game.log
 
 function gameStart () {
   console.log('gameStart() let\'s begin!')
-  // TODO write game logic here
+  // setTimeout(() => {
+  var startReq = Date.now()
+  game.request('state', function (state) {
+    console.log('got world state', Date.now() - startReq, state, 'ms')
+  })
+  // }, 1000)
 }
 
 // register all your handlers here, and call ready
@@ -15,7 +20,7 @@ function load () {
   console.log('... my name is', name)
   application.setInterface({gameStart})
   // lastly call ready, when script is ready to go!
-  methods.ready()
+  game.ready()
 }
 
-setTimeout(load, 10)
+setTimeout(load, 100)

@@ -9,19 +9,26 @@ const C = {
   BULLET_SPEED: 150
 }
 
+var p1Interface, p2Interface
+var playersPendingReady = 0
 var playersReady = {}
 
 function makePlayerInterface (playerName) {
   playersReady[playerName] = false
+  playersPendingReady++
   return {
     getPlayerName (cb) {
       cb(null, playerName)
     },
     // interface for the player to pass messages to app
-    send (params, callback) {
-      console.log('player', playerName, params)
+    send (args, callback) {
+      console.log('player', playerName, args)
       // TODO implement actual msg interface
       callback(null, {})
+    },
+    request (args, callback) {
+      console.log('%c' + playerName + ' request:', 'color: blue;', args)
+      callback(null, {now: new Date()})
     },
     log (...args) {
       console.log('%c' + playerName + ' log:', 'color: blue;', ...args)
@@ -33,17 +40,25 @@ function makePlayerInterface (playerName) {
       console.log(playerName, 'is ready!')
       playersReady[playerName] = true
       // TODO some signal about player being ready
+      playersPendingReady--
+      if (playersPendingReady === 0) {
+        console.log('All players ready, game about to start!')
+        setTimeout(function () {
+          p2Interface.remote.gameStart()
+          p1Interface.remote.gameStart()
+        }, 1000)
+      }
     }
   }
 }
 
 // after the game is loaded, load workers and start listening to their whining
 function loadWorkers () {
-  var p1Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/goodPlayer.js', makePlayerInterface('p1'))
+  p1Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/goodPlayer.js', makePlayerInterface('p1'))
 
   p1Interface.whenConnected(() => {
     console.log('p1 script loaded succesfully')
-    var p2Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/badPlayer.js', makePlayerInterface('p2'))
+    p2Interface = new jailed.Plugin('http://localhost:8000/poc/game-2-teams/badPlayer.js', makePlayerInterface('p2'))
     p2Interface.whenConnected(() => {
       console.log('p2 script loaded succesfully')
     })
