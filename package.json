@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/flockonus/age-of-code#readme",
   "dependencies": {
+    "browserify-middleware": "7.1.0",
+    "express": "4.15.3",
     "phaser-ce": "2.8.0"
   },
   "standard": {
